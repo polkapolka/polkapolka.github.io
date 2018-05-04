@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>Cleaning Up Facebook Data - Polka</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="/drafts/cleaning-facebook-data.html">
+
+        <meta name="author" content="me" />
+        <meta name="keywords" content="blog" />
+        <meta name="description" content="Some thoughts on data..." />
+
+        <meta property="og:site_name" content="Polka" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="Cleaning Up Facebook Data"/>
+        <meta property="og:url" content="/drafts/cleaning-facebook-data.html"/>
+        <meta property="og:description" content="Some thoughts on data..."/>
+        <meta property="article:published_time" content="2018-05-03" />
+            <meta property="article:section" content="posts" />
+            <meta property="article:tag" content="blog" />
+            <meta property="article:author" content="me" />
+
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="/theme/css/bootstrap.flatly.min.css" type="text/css"/>
+    <link href="/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="/theme/css/pygments/monokai.css" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
+
+
+
+
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/" class="navbar-brand">
+<img class="img-responsive pull-left gap-right" src="/images/favicon.ico" width="24"/> Polka            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="/category/posts.html">Posts</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="/drafts/cleaning-facebook-data.html"
+                       rel="bookmark"
+                       title="Permalink to Cleaning Up Facebook Data">
+                        Cleaning Up Facebook Data
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2018-05-03T14:45:00+02:00"> Thu 03 May 2018</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="/tag/blog.html">blog</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h2>Cleaning Up Facebook Data</h2>
+<p>Facebook gives you data in a zip archive.  Once unzipped, this data is in htm file format.  You can navigate around the data in a web browser.  In order to watch my facebook activity over time, the data needed to be put into excel/csv files.</p>
+<p>Facebook also formats the data to look good on a web page. The dates are all light grey and difficult to see. The messages are all links to message threads and people often think that facebook doesn't keep their messages because they don't realize that the words are actually links. The friends page starts with a list of your current friends and ends with the people who never accepted your requests or friends you deleted. The ad topics curated for you are amorphous words like "freedom" and not examples of the ads or a gallery of ads which you have seen. Having downloaded my data more than once, I noticed a completely different list of ad topics from last time. There is no information about how long an ad topic is associated with you or when an ad topic might change or why.</p>
+<h3>Converting</h3>
+<p>First I pulled all the filenames from the folder.  I then subset the list to contain only the files I wanted to parse.  I then loaded the data into an element tree object.  I subset the object to get the tree element that contained the information from the page and not the header or footer. </p>
+<h4>Friends.htm</h4>
+<p>The header element tells you whether the person is a friend or a person you rejected. This is what a friend looks like in html.</p>
+<p><code>&lt;li&gt;Jane Doe (Jan 27, 2015)&lt;/li&gt;</code></p>
+<p>The friends are listed from most recent friending to least recent. I wanted the output to be an excel file with headers like the one shown below.</p>
+<p><img alt="f1" src="../images/f1.png"></p>
+<h4>Events.htm</h4>
+<p>There are two types of events in the events.htm.  Events with a location, and events without a location. The events with a location look like this.</p>
+<p>The events without a location look like this.</p>
+<p>I wanted to turn this into an excel file with headers like the one shown below.</p>
+<p><img alt="f2" src="../images/f2.png"></p>
+<h4>Messages.htm</h4>
+<p>I have 419 message threads on facebook. This is not a large number of message threads. A message thread in html looks like this.</p>
+<p>This is not enough information to be useful for analysis.  Within each message thread, there is a message post.  The message posts look like this.</p>
+<p>Gathering all the message posts made and inputting them into a csv file is much more useful.  The end result looks like this.</p>
+<p><img alt="f3" src="../images/f3.png"></p>
+<h4>Security.htm</h4>
+<p>Most of the security information is not useful outside of a security context - A list of cookies and ip addresses. However, I did want to know what locations are associated with the account and how many logins/logouts I have.  It also tracks the logins to websites that are not facebook with facebook credentials.  So if you login to gym.com with facebook credentials, then it shows up as a login and records the website.  Facebook knows what you are using to login, whether it is a phone or a computer and what browser you are using on the device. None of that was interesting to me in this context.</p>
+<h5>Locations</h5>
+<p>A location in html looks like this.</p>
+<p>The result of removing and splitting is a data point.</p>
+<p>The result is a csv looking like this.</p>
+<h5>Logins and Log Outs</h5>
+<p>A login in html looks like this.</p>
+<p>The result is a csv looking like this.</p>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy;2018&nbsp; &middot;&nbsp;
+        <a href="https://www.linkedin.com/in/phebepolk/"><i class="fa fa-linkedin-square fa-lg"></i> LinkedIn</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://github.com/polkapolka"><i class="fa fa-github-square fa-lg"></i> GitHub</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://stackoverflow.com/users/4165272/polka"><i class="fa fa-stack-overflow fa-lg"></i> Stack Overflow</a>
+        &nbsp;&middot;&nbsp;
+             Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>   
+
+         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="/theme/js/respond.min.js"></script>
+
+
+
+
+</body>
+</html>
